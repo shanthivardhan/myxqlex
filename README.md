@@ -10,3 +10,12 @@ https://github.com/mysql-otp/mysql-otp
 https://github.com/tjheeta/mysqlex
 
 https://github.com/elixir-ecto/myxql
+
+```elixir
+def deps do
+  [
+    {:myxqlex, "~> 0.1.0"},
+    {:ex_doc, "~> 0.19", only: :dev, runtime: false}
+  ]
+end
+```
