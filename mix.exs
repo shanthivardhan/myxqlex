@@ -23,9 +23,10 @@ defmodule MyXQLEx.MixProject do
     [
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
-      {:ecto_sql, "~> 3.0.5"},
+      {:ecto_sql, "~> 3.0"},
       {:db_connection, "~> 2.0", db_connection_opts()},
-      {:mysql, "~> 1.5.0"}
+      {:mysql, "~> 1.5.0"},
+      {:jason, "~> 1.0", optional: true},
     ]
   end
 
