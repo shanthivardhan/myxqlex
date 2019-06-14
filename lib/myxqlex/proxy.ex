@@ -100,6 +100,7 @@ defmodule MyXQLEx.Proxy do
         {:ok, columns, rows} ->
           # Convert to correct format for Ecto
           # rows = Enum.map(rows, &List.to_tuple(&1))
+          rows = rows |> Enum.map(fn(el) -> Enum.map(el, fn(x) -> if x == :null do nil else x end end) end)
           {:ok, %MyXQLEx.Result{columns: columns, rows: rows, num_rows: length(rows)} }
         :ok ->
           last_insert_id = :mysql.insert_id(pid)
