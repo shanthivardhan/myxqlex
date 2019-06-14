@@ -33,7 +33,7 @@ defmodule MyXQLEx.Proxy do
 
     def start_link(opts) do
       keys = [:host, :username, :password, :database, :port, :timeout]
-      hostname = Keyword.get(opts, :host)
+      hostname = Keyword.get(opts, :hostname)
       normalized_opts =
       (opts ++ [host: hostname])
       |> Keyword.take(keys)
@@ -62,7 +62,7 @@ defmodule MyXQLEx.Proxy do
       # sock_type = (opts[:sock_type] || :tcp) |> Atom.to_string |> String.capitalize()
       # sock_mod = ("Elixir.MyXQLEx.Connection." <> sock_type) |> String.to_atom
       queries = ( Keyword.get(opts, :queries) || [] ) ++ ["SET CHARACTER SET " <> (opts[:charset] || "utf8")]
-      Logger.debug "Conneting Database using options #{inspect opts}"
+      # Logger.debug "Conneting Database using options #{inspect opts}"
       opts = opts
         |> Keyword.put_new(:username, System.get_env("MDBUSER") || System.get_env("USER"))
         |> Keyword.put_new(:password, System.get_env("MDBPASSWORD"))
