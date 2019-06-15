@@ -45,7 +45,6 @@ defmodule MyXQLEx.Protocol do
     # #   end
     # end
 
-    @impl true
     def handle_execute(%Q{} = query, params, _opts, state) do
       response = Proxy.query(state.proxy_pid, query.statement, params)
       case response do
@@ -53,8 +52,8 @@ defmodule MyXQLEx.Protocol do
           {:ok, query, res, state}
         {:ok, resp} = res ->
             {:ok, query, resp, state}
-        {:error, _} ->
-          message = "Query execution error"
+        {:error, err} ->
+          message = "Query execution error #{inspect err.message}"
           exception = %ConnectionError{message: message}
           {:disconnect, exception, state}
         other ->

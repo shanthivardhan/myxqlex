@@ -62,7 +62,6 @@ defmodule MyXQLEx.Proxy do
       # sock_type = (opts[:sock_type] || :tcp) |> Atom.to_string |> String.capitalize()
       # sock_mod = ("Elixir.MyXQLEx.Connection." <> sock_type) |> String.to_atom
       queries = ( Keyword.get(opts, :queries) || [] ) ++ ["SET CHARACTER SET " <> (opts[:charset] || "utf8")]
-      # Logger.debug "Conneting Database using options #{inspect opts}"
       opts = opts
         |> Keyword.put_new(:username, System.get_env("MDBUSER") || System.get_env("USER"))
         |> Keyword.put_new(:password, System.get_env("MDBPASSWORD"))
@@ -96,6 +95,7 @@ defmodule MyXQLEx.Proxy do
     def handle_call({:query, statement, params, opts}, _, pid) do
       # TODO - add parsing of options, eg. timeout
       cmd = get_command(statement)
+      params = params |> Enum.map(fn(el) -> el |> convert_params  end)
       result = case :mysql.query(pid, statement, params) do
         {:ok, columns, rows} ->
           # Convert to correct format for Ecto
@@ -116,5 +116,7 @@ defmodule MyXQLEx.Proxy do
       {:reply, result, pid}
     end
 
+    defp convert_params(%NaiveDateTime{} = param), do: NaiveDateTime.to_erl(param)
+    defp convert_params(param), do: param
 
   end
