@@ -101,11 +101,11 @@ defmodule MyXQLEx.Proxy do
           # Convert to correct format for Ecto
           # rows = Enum.map(rows, &List.to_tuple(&1))
           rows = rows |> Enum.map(fn(el) -> Enum.map(el, fn(x) -> if x == :null do nil else x end end) end)
-          {:ok, %MyXQLEx.Result{columns: columns, rows: rows, num_rows: length(rows)} }
+          {:ok, %MyXQLEx.Result{columns: columns, rows: rows, num_rows: length(rows), connection_id: pid} }
         :ok ->
           last_insert_id = :mysql.insert_id(pid)
           affected_rows = :mysql.affected_rows(pid)
-          {:ok, %MyXQLEx.Result{columns: [], rows: [], num_rows: affected_rows, last_insert_id: last_insert_id} }
+          {:ok, %MyXQLEx.Result{columns: [], rows: nil, num_rows: affected_rows, last_insert_id: last_insert_id, connection_id: pid} }
         {:error, {mysql_err_code, _, msg}} ->
           {:error, %MyXQLEx.Error{message: "#{mysql_err_code} - #{msg}"}}
         _ ->

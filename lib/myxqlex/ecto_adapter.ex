@@ -183,7 +183,7 @@ defmodule MyXQLEx.EctoAdapter do
     ## Helpers
 
     defp run_query(sql, opts) do
-      {:ok, _} = Application.ensure_all_started(:myxql)
+      {:ok, _} = Application.ensure_all_started(:myxqlex)
 
       opts =
         opts
@@ -194,9 +194,9 @@ defmodule MyXQLEx.EctoAdapter do
       {:ok, pid} = Task.Supervisor.start_link
 
       task = Task.Supervisor.async_nolink(pid, fn ->
-        {:ok, conn} = MyXQL.start_link(opts)
+        {:ok, conn} = MyXQLEx.start_link(opts)
 
-        value = MyXQL.query(conn, sql, [], opts)
+        value = MyXQLEx.query(conn, sql, [], opts)
         GenServer.stop(conn)
         value
       end)
@@ -216,7 +216,7 @@ defmodule MyXQLEx.EctoAdapter do
     end
 
     defp exit_to_exception({%{__struct__: struct} = error, _})
-        when struct in [MyXQL.Error, DBConnection.Error],
+        when struct in [MyXQLEx.Error, DBConnection.Error],
         do: error
 
     defp exit_to_exception(reason), do: RuntimeError.exception(Exception.format_exit(reason))
