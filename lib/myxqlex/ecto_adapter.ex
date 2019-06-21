@@ -16,6 +16,7 @@ defmodule MyXQLEx.EctoAdapter do
     def loaders(:boolean, type),        do: [&bool_decode/1, type]
     def loaders(:string, type),         do: [&string_decode/1, type]
     def loaders(:naive_datetime, type), do: [&naive_datetime_decode/1, type]
+    def loaders(:utc_datetime, type),   do: [&naive_datetime_decode/1, type]
     def loaders(:binary_id, type),      do: [Ecto.UUID, type]
     def loaders(_, type),               do: [type]
 
